@@ -11,7 +11,7 @@ const NotesListPage = () => {
     }, [])
 
     const getNotes = () => {
-        fetch('http://localhost:8000/api/notes/')
+        fetch('/api/notes/')
         .then(res => res.json())
         .then(result => {
             setNotes(result)

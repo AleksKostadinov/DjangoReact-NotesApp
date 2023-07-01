@@ -7,7 +7,7 @@ const NotePage = () => {
 
     const params = useParams();
     const noteId = params.id
-    const baseUrl = `http://localhost:8000/api/notes/${noteId}`
+    const baseUrl = `/api/notes/${noteId}`
     // let note = notes.find(note => note.id === Number(noteId))
     const [note, setNote] = useState(null)
 
@@ -42,29 +42,28 @@ const NotePage = () => {
     }
 
     const createNote = async () => {
-        console.log('Note')
-        await fetch(`http://localhost:8000/api/notes/`, {
+        await fetch(`api/notes/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({...note, 'updated': new Date()})
+            body: JSON.stringify(note)
         })
     }
 
     const updateNote = async () => {
-        await fetch(`http://localhost:8000/api/notes/${noteId}`, {
+        await fetch(`/api/notes/${noteId}/update/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({...note, 'updated': new Date()})
+            body: JSON.stringify(note)
         })
     }
 
     const deleteNote = async () => {
-        await fetch(`http://localhost:8000/api/notes/${noteId}`, {
-            method: 'Delete',
+        await fetch(`/api/notes/${noteId}/delete/`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             }
