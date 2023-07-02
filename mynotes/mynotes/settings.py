@@ -130,7 +130,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend/build/static'
+    os.path.join(BASE_DIR / 'frontend/build/static'),
 ]
 
 # Default primary key field type
@@ -149,3 +149,4 @@ REST_FRAMEWORK = {
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED').split(' ')
