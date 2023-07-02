@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ReactComponent as ArrowLeft } from '../assets/arrow-left.svg';
-
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { ReactComponent as ArrowLeft } from "../assets/arrow-left.svg";
 
 const NotePage = () => {
-
     const params = useParams();
-    const noteId = params.id
-    const baseUrl = `/api/notes/${noteId}`
+    const noteId = params.id;
+    const baseUrl = `/api/notes/${noteId}`;
     // let note = notes.find(note => note.id === Number(noteId))
-    const [note, setNote] = useState(null)
+    const [note, setNote] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        getNote()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [noteId]) //when is changing noteId to rerun useEffect
+        getNote();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [noteId]); //when is changing noteId to rerun useEffect
 
     const getNote = () => {
-        if (noteId === 'new') return
+        if (noteId === "new") return;
+
         fetch(baseUrl)
-        .then(res => res.json())
-        .then(result => {
-            setNote(result)
-        } )
-    }
+            .then((res) => res.json())
+            .then((result) => {
+                setNote(result);
+            });
+    };
 
     // const getNote = async () => {
     //     if (noteId === 'new') return
@@ -34,79 +33,79 @@ const NotePage = () => {
     //     setNote(result)
     // }
 
-    const onChange = (e) =>{
-        setNote({
+    const onChange = (value) => {
+        setNote( note => ({
             ...note,
-            'body': e.target.value
-        });
-    }
+            'body': value
+        }));
+    };
 
-    const createNote = async () => {
-        await fetch(`api/notes/create/`, {
-            method: 'POST',
+    const createNote = async (note) => {
+        await fetch(`/api/notes/create/`, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(note)
-        })
-    }
+        });
+    };
 
     const updateNote = async () => {
         await fetch(`/api/notes/${noteId}/update/`, {
-            method: 'PUT',
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(note)
-        })
-    }
+        });
+    };
 
     const deleteNote = async () => {
         await fetch(`/api/notes/${noteId}/delete/`, {
-            method: 'DELETE',
+            method: "DELETE",
             headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        navigate('/')
-    }
+                "Content-Type": "application/json",
+            },
+        });
+        navigate("/");
+    };
 
     const goToHomePage = () => {
-        navigate('/')
-    }
+        navigate("/");
+    };
 
     const handleSubmit = () => {
-        if (noteId !== 'new' && !note.body) {
+        if (noteId !== 'new' && note.body === '') {
             deleteNote()
         } else if (noteId !== 'new') {
             updateNote()
-        } else if (noteId === 'new' && note!== null) {
-            createNote()
+        } else if (noteId === 'new' && note.body !== null) {
+            createNote(note)
         }
 
-        navigate('/')
-    }
+        navigate("/");
+    };
 
     return (
-        <div className='note'>
+        <div className="note">
             <div className="note-header">
                 <h3>
-                    <ArrowLeft onClick={goToHomePage}/>
+                    <ArrowLeft onClick={goToHomePage} />
                     <button onClick={handleSubmit}>Update</button>
                 </h3>
 
-                {noteId !== 'new' &&
+                {noteId !== "new" && (
                     <button onClick={deleteNote}>Delete</button>
-
-                }
-
+                )}
             </div>
 
-            <textarea onChange={onChange} placeholder="Edit note" value={note?.body}>
-
-            </textarea>
+            <textarea
+                onChange={(e) => { onChange(e.target.value) }}
+                placeholder="Edit note"
+                value={note?.body}
+            ></textarea>
         </div>
-    )
-}
+    );
+};
 
-export default NotePage
+export default NotePage;
